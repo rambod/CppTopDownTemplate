@@ -9,9 +9,8 @@
 
 class Character {
 public:
-    Character();
+    Character(int windowWidth, int windowHeight);
     Vector2 getWorldPos() { return worldPos; }
-    void setScreenPos(int winWidth,int winHeight);
     void setWorldPos(Vector2 pos) { worldPos = pos; }
     void tick(float deltaTime);
     void undoMovement();
@@ -33,6 +32,7 @@ private:
     float speed{4.f};
     float width{};
     float height{};
+    float scale{4.0f};
 
 };
 

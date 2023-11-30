@@ -6,16 +6,16 @@
 #include "Character.h"
 
 
-Character::Character() {
-    width = (float)texture.width / (float)maxFrames;
-    height = (float)texture.height;
+Character::Character(int windowWidth, int windowHeight) {
+    width = texture.width / maxFrames;
+    height = texture.height;
+
+    screenPos =  {static_cast<float>(windowWidth) / 2.0f - scale * (0.5f * width),
+                  static_cast<float>(windowHeight) / 2.0f - scale * (0.5f * height)
+    };
 
 }
-void Character::setScreenPos(int winWidth,int winHeight) {
-    screenPos =  {(float)winWidth / 2.0f - 4.0f * (0.5f * width),
-                  (float)winHeight / 2.0f - 4.0f * (0.5f * height)
-    };
-}
+
 
 void Character::tick(float deltaTime) {
     worldPosLastFrame = worldPos;
@@ -49,7 +49,7 @@ void Character::tick(float deltaTime) {
     }
     //draw the character
     Rectangle source{frame * width,0.f,rightLeft * (float)texture.width / 6.0f,height};
-    Rectangle  dest{screenPos.x,screenPos.y,4.0f*width,4.0f * height};
+    Rectangle  dest{screenPos.x,screenPos.y,scale * width,scale * height};
 
     DrawTexturePro(texture,source,dest,Vector2{},0.f,WHITE);
 

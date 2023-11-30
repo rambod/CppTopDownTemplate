@@ -33,8 +33,7 @@ int main() {
     const float mapScale = 4.0f;
 
     //Character
-    Character player;
-    player.setScreenPos(gameSettings.width ,gameSettings.height);
+    Character player{gameSettings.width ,gameSettings.height};
 
     SetTargetFPS(60);
 
