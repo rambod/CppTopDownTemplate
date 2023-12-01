@@ -3,6 +3,8 @@
 #include <raygui.h>
 #include <raymath.h>
 #include "Character.h"
+#include "Prop.h"
+#include "string"
 
 struct GameSettings {
     int width;
@@ -35,7 +37,12 @@ int main() {
     //Character
     Character player{gameSettings.width ,gameSettings.height};
 
+    Prop rock{Vector2{200.0f,200.0f}, LoadTexture("assets/nature_tileset/Rock.png")};
+
     SetTargetFPS(60);
+
+    // draw text player world postion
+
 
     while (!WindowShouldClose()) {
         UpdateMusicStream(music);
@@ -52,6 +59,7 @@ int main() {
                 mapScale,
                 WHITE
         );
+        rock.Render(player.getWorldPos());
         //update animation frame
         player.tick(GetFrameTime());
 
@@ -59,6 +67,9 @@ int main() {
         if(player.getWorldPos().x <0.f || player.getWorldPos().y < 0.0f || player.getWorldPos().x + gameSettings.width >  mapTexture2D.width * mapScale || player.getWorldPos().y + gameSettings.height > mapTexture2D.height * mapScale){
             player.undoMovement();
         }
+
+        std::string worldPosText = std::to_string(player.getWorldPos().x) + ", " + std::to_string(player.getWorldPos().y);
+        DrawText(worldPosText.c_str(), 20, 20, 20, BLACK);
 
         // End Drawing
         EndDrawing();
