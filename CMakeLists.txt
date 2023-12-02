@@ -8,7 +8,9 @@ add_executable(CppTopDownTemplate main.cpp
         Character.h
         Character.cpp
         Prop.cpp
-        Prop.h)
+        Prop.h
+        Enemy.cpp
+        Enemy.h)
 target_link_libraries(CppTopDownTemplate PRIVATE raylib)
 add_custom_command(TARGET CppTopDownTemplate POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

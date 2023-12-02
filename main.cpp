@@ -37,7 +37,10 @@ int main() {
     //Character
     Character player{gameSettings.width ,gameSettings.height};
 
-    Prop rock{Vector2{200.0f,200.0f}, LoadTexture("assets/nature_tileset/Rock.png")};
+    Prop props[2]{
+        Prop{Vector2{600.0f,600.0f}, LoadTexture("assets/nature_tileset/Rock.png")},
+        Prop{Vector2{300.0f,600.0f}, LoadTexture("assets/nature_tileset/Log.png")}
+    };
 
     SetTargetFPS(60);
 
@@ -59,7 +62,13 @@ int main() {
                 mapScale,
                 WHITE
         );
-        rock.Render(player.getWorldPos());
+
+
+        // Draw Props
+        for(auto prop : props){
+            prop.Render(player.getWorldPos());
+        }
+
         //update animation frame
         player.tick(GetFrameTime());
 
@@ -67,6 +76,14 @@ int main() {
         if(player.getWorldPos().x <0.f || player.getWorldPos().y < 0.0f || player.getWorldPos().x + gameSettings.width >  mapTexture2D.width * mapScale || player.getWorldPos().y + gameSettings.height > mapTexture2D.height * mapScale){
             player.undoMovement();
         }
+
+        //Check for collision
+        for(auto prop : props){
+            if(CheckCollisionRecs(player.getCollisionRec(), prop.getCollisionRec(player.getWorldPos()))){
+                player.undoMovement();
+            }
+        }
+
 
         std::string worldPosText = std::to_string(player.getWorldPos().x) + ", " + std::to_string(player.getWorldPos().y);
         DrawText(worldPosText.c_str(), 20, 20, 20, BLACK);

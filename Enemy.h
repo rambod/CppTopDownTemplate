@@ -1,15 +1,16 @@
 //
-// Created by rambod on 11/29/2023.
+// Created by Rambod on 12/2/2023.
 //
-#include <iostream>
-#include <raylib.h>
 
-#ifndef CPPTOPDOWNTEMPLATE_CHARACTER_H
-#define CPPTOPDOWNTEMPLATE_CHARACTER_H
+#ifndef CPPTOPDOWNTEMPLATE_ENEMY_H
+#define CPPTOPDOWNTEMPLATE_ENEMY_H
+#include "raylib.h"
+#include "Character.h"
 
-class Character {
+
+class Enemy {
 public:
-    Character(int windowWidth, int windowHeight);
+    Enemy(Vector2 pos,Texture2D idle_texture, Texture2D run_texture);
     Vector2 getWorldPos() { return worldPos; }
     void setWorldPos(Vector2 pos) { worldPos = pos; }
     void tick(float deltaTime);
@@ -37,4 +38,5 @@ private:
 
 };
 
-#endif //CPPTOPDOWNTEMPLATE_CHARACTER_H
+
+#endif //CPPTOPDOWNTEMPLATE_ENEMY_H
