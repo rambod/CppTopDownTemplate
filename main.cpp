@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "Prop.h"
 #include "string"
+#include "Enemy.h"
 
 struct GameSettings {
     int width;
@@ -36,6 +37,10 @@ int main() {
 
     //Character
     Character player{gameSettings.width ,gameSettings.height};
+    Enemy enemy{Vector2 (0.0f,0.0f),
+                LoadTexture("assets/characters/goblin_idle_spritesheet.png"),
+                LoadTexture("assets/characters/goblin_run_spritesheet.png"),
+    };
 
     Prop props[2]{
         Prop{Vector2{600.0f,600.0f}, LoadTexture("assets/nature_tileset/Rock.png")},
@@ -83,6 +88,8 @@ int main() {
                 player.undoMovement();
             }
         }
+
+        enemy.tick(GetFrameTime());
 
 
         std::string worldPosText = std::to_string(player.getWorldPos().x) + ", " + std::to_string(player.getWorldPos().y);

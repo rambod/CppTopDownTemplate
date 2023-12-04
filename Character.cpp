@@ -41,6 +41,8 @@ void Character::tick(float deltaTime) {
     } else{
         texture = idle;
     }
+
+    //update animation
     runningTime += deltaTime;
     if(runningTime >= updateTime){
         frame ++;
