@@ -15,7 +15,9 @@ public:
     void setWorldPos(Vector2 pos) { worldPos = pos; }
     virtual void tick(float deltaTime) override;
     virtual Vector2 getScreenPos() override;
-
+    Rectangle getWeaponCollisionRec(){return weaponCollisionRec;}
+    float getHealth() const {return health;}
+    void takeDamage(float Damage);
 private:
     int windowWidth;
     int windowHeight;
@@ -25,6 +27,7 @@ private:
     float rotationAngleDeg = 0;
     float maxSpeed = 1.0f;
     float acceleration = 0.2f;
+    float health{100.0f};
 
 };
 

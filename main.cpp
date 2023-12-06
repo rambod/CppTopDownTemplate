@@ -14,8 +14,8 @@ struct GameSettings {
 
 int main() {
     GameSettings gameSettings = {
-        .width = 384,
-        .height = 384
+        .width = 1024,
+        .height = 860
     };
     InitWindow(gameSettings.width, gameSettings.height, "CppTopDownTemplate");
 
@@ -37,11 +37,26 @@ int main() {
 
     //Character
     Character player{gameSettings.width ,gameSettings.height};
-    Enemy goblin{Vector2 (0.0f,0.0f),
+    Enemy goblin{Vector2 (500.0f,900.0f),
                 LoadTexture("assets/characters/goblin_idle_spritesheet.png"),
                 LoadTexture("assets/characters/goblin_run_spritesheet.png"),
     };
-    goblin.setTarget(&player);
+    Enemy slime{Vector2 (500.0f,500.0f),
+                 LoadTexture("assets/characters/slime_idle_spritesheet.png"),
+                 LoadTexture("assets/characters/slime_run_spritesheet.png"),
+    };
+    Enemy goblin2{Vector2 (500.0f,800.0f),
+                 LoadTexture("assets/characters/goblin_idle_spritesheet.png"),
+                 LoadTexture("assets/characters/goblin_run_spritesheet.png"),
+    };
+
+
+    // Create an array of Enemy* called enemies
+    Enemy* enemies[] = {&goblin, &slime, &goblin2};
+
+    for(Enemy* enemy : enemies){
+        enemy->setTarget(&player);
+    }
 
     Prop props[2]{
         Prop{Vector2{600.0f,600.0f}, LoadTexture("assets/nature_tileset/Rock.png")},
@@ -75,6 +90,16 @@ int main() {
             prop.Render(player.getWorldPos());
         }
 
+        if(!player.getAlive()){
+            DrawText("Game Over", 20, 20, 20, RED);
+            EndDrawing();
+            continue;
+        } else{
+            std::string  playerHealth = "Health: ";
+            playerHealth.append(std::to_string(player.getHealth()), 0,3);
+            DrawText(playerHealth.c_str(), 30.0, 30.0, 40, RED);
+        }
+
         //update animation frame
         player.tick(GetFrameTime());
 
@@ -90,12 +115,25 @@ int main() {
                 player.undoMovement();
             }
         }
-
-        goblin.tick(GetFrameTime());
+        for(Enemy* enemy : enemies){
+            enemy->tick(GetFrameTime());
+        }
+//        goblin.tick(GetFrameTime());
 
 
         std::string worldPosText = std::to_string(player.getWorldPos().x) + ", " + std::to_string(player.getWorldPos().y);
-        DrawText(worldPosText.c_str(), 20, 20, 20, BLACK);
+        DrawText(worldPosText.c_str(), 20, gameSettings.height - 50, 20, BLACK);
+
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+            for(Enemy* enemy : enemies){
+                if( CheckCollisionRecs(enemy->getCollisionRec(), player.getWeaponCollisionRec())) {
+
+                    enemy->setAlive(false);
+                }
+            }
+
+
+        }
 
         // End Drawing
         EndDrawing();

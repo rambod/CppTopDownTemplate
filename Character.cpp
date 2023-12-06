@@ -16,6 +16,7 @@ windowWidth(winWidth), windowHeight(winHeight)
 
 
 void Character::tick(float deltaTime) {
+    if(!getAlive()) return;
     float rotation;
 
     if (IsKeyDown(KEY_A))
@@ -38,7 +39,7 @@ void Character::tick(float deltaTime) {
                 weapon.width * scale    ,
                 weapon.height * scale
         };
-        rotation = 35.f;
+        rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? 35.f: 0.f;
     } else{
         origin = {static_cast<float>(weapon.width * scale), static_cast<float>(weapon.height * scale)};
         offset = {25.f,55.f};
@@ -48,7 +49,7 @@ void Character::tick(float deltaTime) {
                 weapon.width * scale    ,
                 weapon.height * scale
         };
-        rotation = -35.f;
+        rotation = IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? -35.f: 0.f;
 
     }
 
@@ -72,6 +73,13 @@ void Character::tick(float deltaTime) {
 Vector2 Character::getScreenPos() {
     return Vector2{static_cast<float>(windowWidth) / 2.0f - scale * (0.5f * width),
                    static_cast<float>(windowHeight) / 2.0f - scale * (0.5f * height)};
+}
+
+void Character::takeDamage(float Damage) {
+    health -= Damage;
+    if(health <= 0.0f) {
+        setAlive(false);
+    }
 }
 
 

@@ -16,6 +16,8 @@ public:
     void undoMovement();
     Rectangle getCollisionRec();
     virtual Vector2 getScreenPos() = 0;
+    bool getAlive(){return alive;}
+    void setAlive(bool alive){this->alive = alive;}
 protected:
     Texture2D texture{LoadTexture("assets/characters/knight_idle_spritesheet.png")};
     Texture2D idle{LoadTexture("assets/characters/knight_idle_spritesheet.png")};
@@ -36,6 +38,7 @@ protected:
     float height{};
     float scale{4.0f};
     Vector2 velocity{};
+private:
     bool alive{true};
 
 };
