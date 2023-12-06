@@ -6,6 +6,12 @@
 #include "Prop.h"
 #include "string"
 #include "Enemy.h"
+#include <vector>
+#include <random>
+#include <memory>
+#include <algorithm>
+
+
 
 struct GameSettings {
     int width;
@@ -52,10 +58,26 @@ int main() {
 
 
     // Create an array of Enemy* called enemies
-    Enemy* enemies[] = {&goblin, &slime, &goblin2};
+//    Enemy* enemies[] = {&goblin, &slime, &goblin2};
+    std::vector<std::unique_ptr<Enemy>> enemies;
+    std::random_device rd;  // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(100.0, 800.0); // Range for random positions
 
-    for(Enemy* enemy : enemies){
-        enemy->setTarget(&player);
+    for (int i = 0; i < 30; ++i) {
+        float randomX = dis(gen); // Generate a random X position
+        float randomY = dis(gen); // Generate a random Y position
+
+        // Create a unique pointer to a new Enemy and add it to the vector
+        enemies.emplace_back(std::make_unique<Enemy>(
+                Vector2(randomX, randomY),
+                LoadTexture("assets/characters/goblin_idle_spritesheet.png"),
+                LoadTexture("assets/characters/goblin_run_spritesheet.png")
+        ));
+    }
+
+    for(auto& enemyPtr : enemies){
+        enemyPtr->setTarget(&player);
     }
 
     Prop props[2]{
@@ -115,8 +137,8 @@ int main() {
                 player.undoMovement();
             }
         }
-        for(Enemy* enemy : enemies){
-            enemy->tick(GetFrameTime());
+        for(auto& enemyPtr  : enemies){
+            enemyPtr->tick(GetFrameTime());
         }
 //        goblin.tick(GetFrameTime());
 
@@ -125,13 +147,17 @@ int main() {
         DrawText(worldPosText.c_str(), 20, gameSettings.height - 50, 20, BLACK);
 
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-            for(Enemy* enemy : enemies){
-                if( CheckCollisionRecs(enemy->getCollisionRec(), player.getWeaponCollisionRec())) {
+            for(auto& enemyPtr : enemies){
+                if( CheckCollisionRecs(enemyPtr->getCollisionRec(), player.getWeaponCollisionRec())) {
 
-                    enemy->setAlive(false);
+                    enemyPtr->setAlive(false);
                 }
             }
-
+            enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
+                                         [](const std::unique_ptr<Enemy>& enemyPtr) {
+                                             return !enemyPtr->getAlive();
+                                         }),
+                          enemies.end());
 
         }
 
