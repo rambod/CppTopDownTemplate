@@ -128,7 +128,6 @@ int main() {
         //Check if player is out of bounds
         if(player.getWorldPos().x <0.f || player.getWorldPos().y < 0.0f || player.getWorldPos().x + gameSettings.width >  mapTexture2D.width * mapScale || player.getWorldPos().y + gameSettings.height > mapTexture2D.height * mapScale){
             player.undoMovement();
-            printf("out of boundry");
         }
 
         //Check for collision
