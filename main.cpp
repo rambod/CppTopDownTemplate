@@ -37,10 +37,11 @@ int main() {
 
     //Character
     Character player{gameSettings.width ,gameSettings.height};
-    Enemy enemy{Vector2 (0.0f,0.0f),
+    Enemy goblin{Vector2 (0.0f,0.0f),
                 LoadTexture("assets/characters/goblin_idle_spritesheet.png"),
                 LoadTexture("assets/characters/goblin_run_spritesheet.png"),
     };
+    goblin.setTarget(&player);
 
     Prop props[2]{
         Prop{Vector2{600.0f,600.0f}, LoadTexture("assets/nature_tileset/Rock.png")},
@@ -80,6 +81,7 @@ int main() {
         //Check if player is out of bounds
         if(player.getWorldPos().x <0.f || player.getWorldPos().y < 0.0f || player.getWorldPos().x + gameSettings.width >  mapTexture2D.width * mapScale || player.getWorldPos().y + gameSettings.height > mapTexture2D.height * mapScale){
             player.undoMovement();
+            printf("out of boundry");
         }
 
         //Check for collision
@@ -89,7 +91,7 @@ int main() {
             }
         }
 
-        enemy.tick(GetFrameTime());
+        goblin.tick(GetFrameTime());
 
 
         std::string worldPosText = std::to_string(player.getWorldPos().x) + ", " + std::to_string(player.getWorldPos().y);

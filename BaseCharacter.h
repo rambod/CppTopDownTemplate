@@ -12,14 +12,15 @@ public:
     BaseCharacter();
     virtual ~BaseCharacter() = default;
     Vector2 getWorldPos() { return worldPos; }
-//    virtual void tick(float deltaTime);
+    virtual void tick(float deltaTime);
     void undoMovement();
     Rectangle getCollisionRec();
+    virtual Vector2 getScreenPos() = 0;
 protected:
     Texture2D texture{LoadTexture("assets/characters/knight_idle_spritesheet.png")};
     Texture2D idle{LoadTexture("assets/characters/knight_idle_spritesheet.png")};
     Texture2D run{LoadTexture("assets/characters/knight_run_spritesheet.png")};
-    Vector2 screenPos{};
+//    Vector2 screenPos{};
     Vector2 worldPos{};
     Vector2 worldPosLastFrame{};
     float rotation = 0.0f;
@@ -34,6 +35,8 @@ protected:
     float width{};
     float height{};
     float scale{4.0f};
+    Vector2 velocity{};
+    bool alive{true};
 
 };
 
