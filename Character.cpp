@@ -11,6 +11,7 @@ windowWidth(winWidth), windowHeight(winHeight)
 {
     width = texture.width / maxFrames;
     height = texture.height;
+    worldPos = Vector2 {700,1250};
 
 }
 
